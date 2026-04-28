@@ -284,64 +284,72 @@ function DebtTab() {
 }
 
 function AITab() {
-  const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [asked, setAsked] = useState(false);
-  const suggestions = ["How do I start saving more on groceries?", "What's the best way to pay off credit card debt?", "How do I build a 3-month emergency fund?", "Tips for managing money as a single mom?"];
-
-  async function askAI(question) {
-    const q = question || prompt.trim();
-    if (!q) return;
-    setLoading(true); setAsked(true); setResponse("");
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514", max_tokens: 1000,
-          system: "You are Mama Lita — a warm, faith-inspired financial coach for mothers. Give practical, encouraging, grace-filled advice. Speak like a wise older mother who is financially savvy. Keep responses to 3-4 paragraphs. Occasionally include a scripture or proverb when fitting.",
-          messages: [{ role: "user", content: q }],
-        }),
-      });
-      const data = await res.json();
-      setResponse(data.content?.map(c => c.text || "").join("") || "I'm having trouble connecting. Please try again.");
-    } catch { setResponse("Something went wrong. Please check your connection and try again."); }
-    setLoading(false);
-  }
+  const previews = [
+    "How do I start saving more on groceries?",
+    "What's the best way to pay off credit card debt?",
+    "How do I build a 3-month emergency fund?",
+    "Tips for managing money as a single mom?",
+  ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+      {/* Header */}
       <Card style={{ background: `linear-gradient(135deg, ${COLORS.deepPlum}, ${COLORS.mauve})`, textAlign: "center" }}>
-        <div style={{ fontSize: 32, marginBottom: 8 }}>✨</div>
-        <div style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#fff", fontSize: 20, fontWeight: 700 }}>Ask Mama Lita</div>
+        <div style={{ fontSize: 36, marginBottom: 8 }}>✨</div>
+        <div style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#fff", fontSize: 22, fontWeight: 700 }}>Ask Mama Lita</div>
         <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, marginTop: 4 }}>Your personal faith-inspired money coach</div>
       </Card>
+
+      {/* Premium Notice */}
+      <Card style={{ border: `2px solid ${COLORS.gold}`, background: `linear-gradient(160deg, #fffaf0, ${COLORS.cream})`, textAlign: "center" }}>
+        <div style={{ fontSize: 28, marginBottom: 10 }}>🔒</div>
+        <div style={{ fontFamily: "'Playfair Display', Georgia, serif", color: COLORS.deepPlum, fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+          Premium Feature
+        </div>
+        <div style={{ color: "#7a5060", fontSize: 14, lineHeight: 1.7, fontFamily: "Georgia, serif", marginBottom: 16 }}>
+          The Mama Lita AI Coach is available exclusively to our <strong style={{ color: COLORS.mauve }}>Premium Members</strong>. 
+          Upgrade to unlock personalized, faith-inspired financial guidance whenever you need it — like having a wise mama in your corner 24/7.
+        </div>
+        <div style={{ background: COLORS.blush, borderRadius: 12, padding: "12px 16px", marginBottom: 16, fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 13, color: COLORS.deepPlum }}>
+          "She opens her mouth with wisdom, and the teaching of kindness is on her tongue." — Proverbs 31:26
+        </div>
+        <a href="mailto:hello@mamalitas.com?subject=Premium Membership"
+          style={{
+            display: "block", background: `linear-gradient(135deg, ${COLORS.gold}, #b8902a)`,
+            color: COLORS.deepPlum, fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 700, fontSize: 15, padding: "14px 24px", borderRadius: 50,
+            textDecoration: "none", letterSpacing: "0.03em",
+          }}>
+          Upgrade to Premium →
+        </a>
+        <div style={{ fontSize: 11, color: "#aaa", marginTop: 10, fontFamily: "Georgia, serif" }}>
+          Questions? Email us at hello@mamalitas.com
+        </div>
+      </Card>
+
+      {/* Preview of what's inside */}
       <Card>
-        <div style={{ fontSize: 13, color: COLORS.mauve, fontFamily: "Georgia, serif", marginBottom: 10 }}>Quick questions:</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-          {suggestions.map(s => (
-            <button key={s} onClick={() => { setPrompt(s); askAI(s); }}
-              style={{ background: COLORS.cream, border: `1px solid ${COLORS.blush}`, borderRadius: 10, padding: "9px 12px", textAlign: "left", cursor: "pointer", fontSize: 13, color: COLORS.deepPlum, fontFamily: "Georgia, serif" }}
-              onMouseOver={e => e.currentTarget.style.background = COLORS.blush}
-              onMouseOut={e => e.currentTarget.style.background = COLORS.cream}>{s}</button>
+        <div style={{ fontFamily: "'Playfair Display', Georgia, serif", color: COLORS.mauve, fontSize: 14, fontWeight: 700, marginBottom: 4 }}>
+          💬 Premium members can ask questions like:
+        </div>
+        <div style={{ fontSize: 12, color: "#aaa", fontFamily: "Georgia, serif", marginBottom: 12 }}>
+          Unlock all of these and ask your own:
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {previews.map(s => (
+            <div key={s} style={{
+              background: "#f5f0eb", border: `1px solid ${COLORS.blush}`, borderRadius: 10,
+              padding: "10px 14px", fontSize: 13, color: "#bbb",
+              fontFamily: "Georgia, serif", display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <span>{s}</span>
+              <span style={{ fontSize: 16 }}>🔒</span>
+            </div>
           ))}
         </div>
       </Card>
-      <Card>
-        <textarea placeholder="Ask your own question..." value={prompt} onChange={e => setPrompt(e.target.value)} rows={3}
-          style={{ width: "100%", border: `1.5px solid ${COLORS.blush}`, borderRadius: 12, padding: "10px 14px", fontFamily: "Georgia, serif", fontSize: 14, color: COLORS.deepPlum, background: COLORS.cream, resize: "none", outline: "none", boxSizing: "border-box" }} />
-        <button onClick={() => askAI()} disabled={loading || !prompt.trim()}
-          style={{ marginTop: 10, width: "100%", background: loading ? "#ccc" : `linear-gradient(135deg, ${COLORS.rose}, ${COLORS.mauve})`, color: "#fff", border: "none", borderRadius: 12, padding: "12px", fontSize: 15, fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, cursor: loading ? "default" : "pointer" }}>
-          {loading ? "Mama Lita is thinking..." : "Ask Mama Lita ✨"}
-        </button>
-      </Card>
-      {(loading || asked) && (
-        <Card style={{ borderLeft: `4px solid ${COLORS.gold}` }}>
-          <div style={{ fontFamily: "'Playfair Display', Georgia, serif", color: COLORS.mauve, fontSize: 14, marginBottom: 8 }}>Mama Lita says:</div>
-          {loading ? <div style={{ color: "#bbb", fontStyle: "italic" }}>Gathering wisdom for you...</div>
-            : <div style={{ color: COLORS.deepPlum, fontSize: 14, lineHeight: 1.7, fontFamily: "Georgia, serif", whiteSpace: "pre-wrap" }}>{response}</div>}
-        </Card>
-      )}
+
     </div>
   );
 }
