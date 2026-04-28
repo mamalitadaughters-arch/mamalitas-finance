@@ -314,7 +314,7 @@ function AITab() {
         <div style={{ background: COLORS.blush, borderRadius: 12, padding: "12px 16px", marginBottom: 16, fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 13, color: COLORS.deepPlum }}>
           "She opens her mouth with wisdom, and the teaching of kindness is on her tongue." — Proverbs 31:26
         </div>
-        <a href="mailto:hello@mamalitas.com?subject=Premium Membership"
+        <a href="mailto:mama.lita.daughters@gmail.com?subject=Premium Membership"
           style={{
             display: "block", background: `linear-gradient(135deg, ${COLORS.gold}, #b8902a)`,
             color: COLORS.deepPlum, fontFamily: "'Playfair Display', Georgia, serif",
