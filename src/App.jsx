@@ -324,7 +324,7 @@ function AITab() {
           Upgrade to Premium →
         </a>
         <div style={{ fontSize: 11, color: "#aaa", marginTop: 10, fontFamily: "Georgia, serif" }}>
-          Questions? Email us at hello@mamalitas.com
+          Questions? Email us at mama.lita.daughters@gmail.com
         </div>
       </Card>
 
